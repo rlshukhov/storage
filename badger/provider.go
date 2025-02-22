@@ -30,10 +30,6 @@ type provider[K any, V any] struct {
 
 func New[K ~string | ~uint64, V any](cfg Config) (*provider[K, V], error) {
 	p := &provider[K, V]{cfg: cfg}
-	if err := p.Setup(); err != nil {
-		return nil, err
-	}
-
 	return p, nil
 }
 

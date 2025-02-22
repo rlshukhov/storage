@@ -26,15 +26,19 @@ func performTestsForProviders[K ~string | ~uint64, V any](t *testing.T, test fun
 			InMemory: true,
 		}),
 	})
+	if err != nil {
+		panic(err)
+	}
+	err = emb.Setup()
+	if err != nil {
+		panic(err)
+	}
 	defer func(emb KeyValueProvider[K, V]) {
 		err := emb.Shutdown()
 		if err != nil {
 			panic(err)
 		}
 	}(emb)
-	if err != nil {
-		panic(err)
-	}
 
 	fPath := "/tmp/test." + uuid.NewString() + ".yaml"
 	f, err := GetKeyValueProviderFromConfig[K, V](KeyValueConfig{
@@ -46,6 +50,10 @@ func performTestsForProviders[K ~string | ~uint64, V any](t *testing.T, test fun
 		panic(err)
 	}
 
+	err = f.Setup()
+	if err != nil {
+		panic(err)
+	}
 	defer func() {
 		err := f.Shutdown()
 		if err != nil {
